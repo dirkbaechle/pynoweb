@@ -1,8 +1,9 @@
 #!/usr/bin/env python
+# coding: latin-1
 #
-# noweb.py (https://code.launchpad.net/~dl9obn/pynoweb)
-#
-# Based on an idea by Jonathan Aquino (jonathan.aquino@gmail.com)
+# Copyright (c) 2009 Dirk Baechle.
+# www: http://www.mydarc.de/dl9obn/programming/python/pynoweb
+# mail: dl9obn AT darc.de
 #
 # This program is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -18,11 +19,13 @@
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 #
+# Based on an idea by Jonathan Aquino (jonathan.aquino@gmail.com)
+#
 # This program extracts code from a literate programming document in "noweb" format.
 # For more information, including the original source code and documentation,
 # see http://jonaquino.blogspot.com/2010/04/nowebpy-or-worlds-first-executable-blog.html
 #
-# Additional refactorings and modifications by Dirk Baechle (dl9obn@darc.de):
+# Additional refactorings and modifications by Dirk Baechle:
 #
 #  - You can now say <<file:included.txt>>, which reads in "include.txt"
 #    while parsing the noweb file(s). This can be done recursively and helps to

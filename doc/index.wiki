@@ -1,0 +1,113 @@
+@title: pynoweb
+@author: Dirk Baechle
+
+Being a long-time fan of [[http://www.cs.tufts.edu/~nr/noweb/ noweb]] by Norman Ramsey, I
+recently checked the internet for a Python clone. I detected $$noweb.py$$ by
+Jonathan Aquino (jonathan.aquino@gmail.com),
+(see [[http://jonaquino.blogspot.com/2010/04/nowebpy-or-worlds-first-executable-blog.html]])
+and gave it a try. While providing basic support for un''tangling'' chunks in $$*.nw$$
+files, it missed a ''file include'' option. My actual task was to write a rather long
+shell script (Bash) and I wanted to export it to one single file, but manage/edit it in
+pieces for a better overview.
+
+So, I took the source, twisted it in some places and added simple ''file includes''
+to the syntax.
+
+== Current version == current
+
+~[[pynoweb.zip pynoweb.zip]]||Archived folder with the Python script for $$pynoweb$$.
+
+== Basic usage == basic
+
+Noweb files are divided into chunks. The %%@%% sign in the first column of a line
+starts a new chunk, after it you can add arbitrary text as description. A chunk can also
+contain a code section where an output file can be extracted from. A piece of code is
+defined by the %%<\blank<tag>\blank>=%% marker. The %%tag%% can be a filename or
+a string with several words, separated by blanks.
+
+Within a code section you can refer to other defined code sections by using the
+%%<\blank<tag>\blank>%% marker (without the trailing %%=%%). 
+
+An example:
+
+{{Code:
+@
+
+<<output.sh>>=
+<<start of file>>
+<<end of file>>
+
+@
+
+<<start of file>>=
+echo "Hi"
+
+@
+
+<<end of file>>=
+echo "there!"
+
+}}
+
+Saving this as file %%output.nw%% you can extract the defined output chunk %%output.sh%%
+
+{{Code:
+echo "Hi"
+echo "there!"
+
+}}
+
+by the command
+
+Code:
+python noweb.py -Routput.sh output.nw > output.sh
+
+For more infos about noweb's syntax, refer to its manual please.
+
+== Extensions == extensions
+
+As an extension to this simple replace mechanism, you can include other files during the
+chunk parsing phase with the %%<\blank<file:infile_name>\blank>%% marker. It reads
+the file %%infile_name%% and adds its contents to the top file. These includes can be nested
+arbitrarily, but you have to be careful to avoid cyclic dependencies!
+
+Example:
+
+File %%main.nw%%
+
+{{Code:
+@
+
+<<main.sh>>=
+#!/bin/sh
+
+<<file:utils.sh>>
+<<utility stuff>>
+
+# EOF
+}}
+
+File %%utils.sh%%
+
+{{Code:
+@
+
+<<utility stuff>>=
+echo "Hi there!"
+
+}}
+
+Calling
+
+Code:
+python noweb.py -Rmain.sh main.nw > main.sh
+
+results in the output
+
+{{Code:
+#!/bin/sh
+
+echo "Hi there!"
+
+# EOF
+}}
